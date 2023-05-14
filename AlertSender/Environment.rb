@@ -1,0 +1,6 @@
+ENV['LOG_OUTPUT'] = ENV['LOG_OUTPUT'] || ''
+ENV['KAFKA_HOST'] = ENV['KAFKA_HOST'] || 'localhost'
+ENV['KAFKA_PORT'] = ENV['KAFKA_PORT'] || '9092'
+ENV['HOST'] = ENV['HOST'] || 'localhost'
+ENV['TOPIC'] = ENV['TOPIC'] || 'alerts'
+ENV['GROUP'] = ENV['GROUP'] || 'alertGroup'
