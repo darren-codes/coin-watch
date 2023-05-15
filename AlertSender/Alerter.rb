@@ -12,5 +12,6 @@ begin
   end
 rescue Exception => e
   puts "Exception occurred: #{e.message} with trace #{e.backtrace.inspect}"
+  exit 1
 end
 
