@@ -34,7 +34,7 @@ class WebSocketClient
     end
 
     loop do
-      STDIN.gets.strip
+      STDIN.gets
     end
   end
 end
