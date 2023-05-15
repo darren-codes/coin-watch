@@ -1,0 +1,94 @@
+version: '3.4'
+
+services:
+  # server: 
+  #   build:
+  #     context: ./Server
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   ports: 
+  #     - 4567:4567
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       ruby Db/DbInit.rb
+  #       ruby Model/Server.rb   
+  #   volumes:
+  #     - gem_cache:/usr/local/bundle/gems
+  #   environment:
+  #     HOST: db
+
+  # alertcreater:
+  #   build:
+  #     context: ./AlertCreater
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - db
+  #     - broker
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       ruby Model/WsClient.rb   
+  #   volumes:
+  #     - gem_cache:/usr/local/bundle/gems
+  #   environment:
+  #     HOST: db
+  #     KAFKA_HOST: broker
+
+  alertsender: 
+    build:
+      context: ./AlertSender
+      dockerfile: Dockerfile
+    depends_on:
+      - broker
+    command:
+      - /bin/sh
+      - -c
+      - |
+        ruby Alerter.rb   
+    volumes:
+      - gem_cache:/usr/local/bundle/gems
+    environment:
+      KAFKA_HOST: broker
+      KAFKA_PORT: 9002
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.3.2
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  # redis:
+  #   image: redis:5.0.7
+
+  db:
+    image: postgres:12.1
+    ports: 
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 123456
+
+volumes:
+  gem_cache:
+  db_data:
