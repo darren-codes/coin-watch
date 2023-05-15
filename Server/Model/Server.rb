@@ -6,6 +6,7 @@ require_relative '../Config/Constants.rb'
 
 class Server < Sinatra::Base
   register Sinatra::Namespace
+  set :bind, '0.0.0.0'
   enable :logging
 
   include AutoInject['logger']
