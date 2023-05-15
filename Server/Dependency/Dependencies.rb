@@ -1,11 +1,10 @@
 require 'dry-container'
 require 'dry-auto_inject'
 require 'logger'
-require 'kafka'
-require_relative '../Models/CustomLogger.rb'
+require_relative '../Model/CustomLogger.rb'
+require_relative '../Db/Db.rb'
 require_relative '../Config/Utilities.rb'
 require_relative '../Config/Environment.rb'
-require_relative '../Db/Db.rb'
 
 dependencyContainer = Dry::Container.new
 dependencyContainer.register('logger', -> {
@@ -13,11 +12,7 @@ dependencyContainer.register('logger', -> {
   logger.level = Logger::INFO
   logger
 })
-dependencyContainer.register('producer', -> {
-  kafka = Kafka.new(["#{ENV['KAFKA_HOST']}:#{ENV['KAFKA_PORT']}"])
-  kafka.producer
-})
+dependencyContainer.register('userRepo', -> { User })
 dependencyContainer.register('alertRepo', -> { Alert })
 
-
-Injector = Dry::AutoInject(dependencyContainer)
+AutoInject = Dry::AutoInject(dependencyContainer)

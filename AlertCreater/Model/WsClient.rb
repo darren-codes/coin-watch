@@ -1,5 +1,5 @@
 require 'websocket-client-simple'
-require_relative '../Dependencies/WsDependencies.rb'
+require_relative '../Dependency/WsDependencies.rb'
 
 class WebSocketClient
   include AutoInject['wsClient']

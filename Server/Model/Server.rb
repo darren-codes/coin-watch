@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/namespace'
-require_relative '../Dependencies/Dependencies.rb'
+require_relative '../Dependency/Dependencies.rb'
 require_relative '../Config/Constants.rb'
 
 class Server < Sinatra::Base

@@ -1,5 +1,5 @@
 require_relative '../Config/Constants.rb'
-require_relative '../Dependencies/AlertDependencies.rb'
+require_relative '../Dependency/AlertDependencies.rb'
 
 class AlertCreator
   include Injector['logger']

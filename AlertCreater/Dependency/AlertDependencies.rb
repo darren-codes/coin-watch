@@ -2,10 +2,10 @@ require 'dry-container'
 require 'dry-auto_inject'
 require 'logger'
 require 'kafka'
-require_relative '../Models/CustomLogger.rb'
-require_relative '../Models/AlertCreator.rb'
+require_relative '../Model/CustomLogger.rb'
 require_relative '../Config/Utilities.rb'
 require_relative '../Config/Environment.rb'
+require_relative '../Db/Db.rb'
 
 dependencyContainer = Dry::Container.new
 dependencyContainer.register('logger', -> {
@@ -13,13 +13,11 @@ dependencyContainer.register('logger', -> {
   logger.level = Logger::INFO
   logger
 })
-
-dependencyContainer.register('wsClient', -> {
-  WebSocket::Client::Simple.connect "#{ENV['BASE_URL']}:#{ENV['WS_PORT']}#{ENV['EXTENSION']}"
+dependencyContainer.register('producer', -> {
+  kafka = Kafka.new(["#{ENV['KAFKA_HOST']}:#{ENV['KAFKA_PORT']}"])
+  kafka.producer
 })
+dependencyContainer.register('alertRepo', -> { Alert })
 
-dependencyContainer.register('alertCreator', -> {
-  AlertCreator.new
-})
 
-AutoInject = Dry::AutoInject(dependencyContainer)
+Injector = Dry::AutoInject(dependencyContainer)
