@@ -18,7 +18,7 @@ The server consists of a sinatra application that is connected to a postgres ins
   *create a user with unique id*  
   required fields: ["id", "name", "email", "password"]
 - DELETE /user/delete  
-  *delete a user*  
+  *delete a user and all associated alerts*  
   required fields: ["id", "password"]
 - GET /user/token  
   *get jet token for user*  
