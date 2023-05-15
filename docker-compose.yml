@@ -35,12 +35,7 @@ services:
         ruby Model/WsClient.rb
     volumes:
       - gem_cache:/usr/local/bundle/gems
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+    restart: on-failure:5
     environment:
       HOST: db
       KAFKA_HOST: broker
@@ -59,12 +54,7 @@ services:
         ruby Alerter.rb
     volumes:
       - gem_cache:/usr/local/bundle/gems
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+    restart: on-failure:5
     environment:
       KAFKA_HOST: broker
       KAFKA_PORT: 9092
