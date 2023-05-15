@@ -5,6 +5,6 @@ gem 'dry-container'
 gem 'dry-auto_inject'
 gem 'logger'
 gem 'ruby-kafka'
-gem 'websocket-client-simple', require: false
-gem 'sinatra', require: false
-gem 'sinatra-contrib', require: false
+gem 'websocket-client-simple'
+gem 'sinatra'
+gem 'sinatra-contrib'
