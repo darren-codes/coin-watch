@@ -9,7 +9,7 @@ Watching of price happens using the [binance websocket](wss://stream.binance.com
 Alerts are created using simple endpoints. The postman collection can be found in this project.
 
 ## Components
-
+TODO: JWT and Cache
 
 ## Getting Started
 
