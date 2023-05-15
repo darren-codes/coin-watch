@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 
 services:
   server:
@@ -8,14 +8,14 @@ services:
     depends_on:
       - db
       - redis
-    ports: 
+    ports:
       - 4567:4567
     command:
       - /bin/sh
       - -c
       - |
         ruby Db/DbInit.rb
-        ruby Model/Server.rb   
+        ruby Model/Server.rb 
     volumes:
       - gem_cache:/usr/local/bundle/gems
     environment:
@@ -32,19 +32,21 @@ services:
       - /bin/sh
       - -c
       - |
-        ruby Model/WsClient.rb   
+        ruby Model/WsClient.rb
     volumes:
       - gem_cache:/usr/local/bundle/gems
-    restart_policy:
-      condition: any
-      delay: 5s
-      max_attempts: 3
-      window: 120s
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     environment:
       HOST: db
       KAFKA_HOST: broker
+      KAFKA_PORT: 9092
 
-  alertsender: 
+  alertsender:
     build:
       context: ./AlertSender
       dockerfile: Dockerfile
@@ -54,14 +56,15 @@ services:
       - /bin/sh
       - -c
       - |
-        ruby Alerter.rb   
+        ruby Alerter.rb
     volumes:
       - gem_cache:/usr/local/bundle/gems
-    restart_policy:
-      condition: any
-      delay: 5s
-      max_attempts: 3
-      window: 120s
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     environment:
       KAFKA_HOST: broker
       KAFKA_PORT: 9092
